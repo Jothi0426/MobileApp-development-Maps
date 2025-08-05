@@ -1,14 +1,149 @@
+// import * as Device from 'expo-device';
+// import * as Notifications from 'expo-notifications';
+
+// export const setupNotifications = async (onAccept) => {
+//   if (!Device.isDevice) {
+//     alert('Must use a physical device');
+//     return;
+//   }
+
+//   const { status: existingStatus } = await Notifications.getPermissionsAsync();
+//   let finalStatus = existingStatus;
+//   if (finalStatus !== 'granted') {
+//     const { status } = await Notifications.requestPermissionsAsync();
+//     finalStatus = status;
+//   }
+
+//   if (finalStatus !== 'granted') {
+//     alert('Notification permission not granted');
+//     return;
+//   }
+
+//   await Notifications.setNotificationCategoryAsync('ride_request', [
+//     {
+//       identifier: 'ACCEPT',
+//       buttonTitle: 'Yes',
+//       options: { opensAppToForeground: true },
+//     },
+//     {
+//       identifier: 'DECLINE',
+//       buttonTitle: 'No',
+//       options: { isDestructive: true },
+//     },
+//   ]);
+
+//   Notifications.setNotificationHandler({
+//     handleNotification: async () => ({
+//       shouldShowAlert: true,
+//       shouldPlaySound: true,
+//       shouldSetBadge: false,
+//     }),
+//   });
+
+//   Notifications.addNotificationResponseReceivedListener((response) => {
+//     const action = response.actionIdentifier;
+//     const { latitude, longitude, user_id } = response.notification.request.content.data;
+
+//     if (action === 'ACCEPT') {
+//       onAccept({ latitude, longitude, user_id });
+//     }
+//   });
+// };
+
+// export const showNotification = async (latitude, longitude, user_id) => {
+//   await Notifications.scheduleNotificationAsync({
+//     content: {
+//       title: 'New Ride Request',
+//       body: 'Do you want to accept this ride?',
+//       data: { latitude, longitude, user_id },
+//       categoryIdentifier: 'ride_request',
+//     },
+//     trigger: null,
+//   });
+// };
+
+// utils/notificationSetup.js
+// import * as Device from 'expo-device';
+// import * as Notifications from 'expo-notifications';
+
+// export const setupNotificationCategories = async () => {
+//   await Notifications.setNotificationCategoryAsync('ride_request', [
+//     {
+//       identifier: 'ACCEPT',
+//       buttonTitle: 'Yes',
+//       options: { opensAppToForeground: true },
+//     },
+//     {
+//       identifier: 'DECLINE',
+//       buttonTitle: 'No',
+//       options: { isDestructive: true },
+//     },
+//   ]);
+// };
+
+// export const configureNotifications = async (onRideAccept) => {
+//   if (!Device.isDevice) {
+//     alert('Must use physical device');
+//     return;
+//   }
+
+//   const { status: existingStatus } = await Notifications.getPermissionsAsync();
+//   let finalStatus = existingStatus;
+
+//   if (finalStatus !== 'granted') {
+//     const { status } = await Notifications.requestPermissionsAsync();
+//     finalStatus = status;
+//   }
+
+//   if (finalStatus !== 'granted') {
+//     alert('Notification permission not granted');
+//   }
+
+//   await setupNotificationCategories();
+
+//   Notifications.setNotificationHandler({
+//     handleNotification: async () => ({
+//       shouldShowAlert: true,
+//       shouldPlaySound: true,
+//       shouldSetBadge: false,
+//     }),
+//   });
+
+//   Notifications.addNotificationResponseReceivedListener((response) => {
+//     const action = response.actionIdentifier;
+//     const { latitude, longitude, user_id } = response.notification.request.content.data;
+//     if (action === 'ACCEPT') {
+//       onRideAccept({ latitude, longitude, user_id });
+//     }
+//   });
+// };
+
+// export const showNotification = async (latitude, longitude, user_id) => {
+//   await Notifications.scheduleNotificationAsync({
+//     content: {
+//       title: 'New Ride Request',
+//       body: 'Do you want to accept this ride?',
+//       data: { latitude, longitude, user_id },
+//       categoryIdentifier: 'ride_request',
+//     },
+//     trigger: null,
+//   });
+// };
+
+
+//////===== 08/05/25
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 
-export const setupNotifications = async (onAccept) => {
+export const configureNotifications = async (onAcceptRide) => {
   if (!Device.isDevice) {
-    alert('Must use a physical device');
+    alert('Must use physical device');
     return;
   }
 
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;
+
   if (finalStatus !== 'granted') {
     const { status } = await Notifications.requestPermissionsAsync();
     finalStatus = status;
@@ -45,7 +180,7 @@ export const setupNotifications = async (onAccept) => {
     const { latitude, longitude, user_id } = response.notification.request.content.data;
 
     if (action === 'ACCEPT') {
-      onAccept({ latitude, longitude, user_id });
+      onAcceptRide({ latitude, longitude, user_id });
     }
   });
 };
